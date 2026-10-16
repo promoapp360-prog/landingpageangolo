@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Richiesta ricevuta · L'Angolo del Benessere</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/logo.webp">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<style>
+  body { background: var(--plum); color: #fff; padding: 0; min-height: 100vh; display: grid; place-items: center; }
+  .box { max-width: 520px; margin: 0 auto; padding: 40px 22px; text-align: center; }
+  .ok { width: 84px; height: 84px; border-radius: 50%; background: var(--rose); display: grid; place-items: center; margin: 0 auto 20px; font-size: 2.4rem; box-shadow: 0 0 0 10px rgba(192,105,139,.25); }
+  h1 { color: #fff; font-size: 2.2rem; } h1 em { color: var(--neon); }
+  p { color: #f0d6e1; }
+  .card { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 20px; padding: 20px; margin: 24px 0; text-align: left; }
+  .card ol { margin: 0; padding-left: 20px; } .card li { margin: 6px 0; color: #f6e3ea; }
+  .btn { width: 100%; margin-top: 10px; }
+  a.back { color: #f0d6e1; font-size: .9rem; }
+</style>
+<script>/*__CFG__*/</script>
+</head>
+<body data-page="grazie">
+  <div class="box">
+    <div class="ok">✓</div>
+    <h1>Grazie<span data-nome></span>! <em>Ci siamo quasi</em></h1>
+    <p>Abbiamo ricevuto la tua richiesta di consulenza gratuita. Mariangela ti richiamerà al più presto per fissare l'appuntamento.</p>
+    <div class="card">
+      <b>Cosa succede adesso</b>
+      <ol>
+        <li>Ti chiamiamo (o ti scriviamo su WhatsApp) entro poche ore</li>
+        <li>Fissiamo insieme giorno e orario della consulenza</li>
+        <li>Analizziamo pelle e pelo e creiamo il tuo programma</li>
+      </ol>
+    </div>
+    <p><b>Vuoi fare prima?</b> Scrivici subito su WhatsApp e blocca il tuo posto:</p>
+    <a href="#" class="btn btn-wa" data-wa>Scrivici su WhatsApp</a>
+    <a href="tel:{{telefono}}" class="btn btn-ghost" data-call>Chiama {{telefono_visibile}}</a>
+    <p style="margin-top:28px"><a class="back" href="/">← Torna alla pagina</a></p>
+  </div>
+  <div class="cookie" data-cookie hidden>
+    <p>Usiamo cookie di terze parti (Meta) per misurare l'efficacia delle nostre pubblicità. <a href="/privacy">Dettagli</a></p>
+    <div><button class="btn btn-ghost-dark" data-cookie-no style="width:auto">Solo necessari</button><button class="btn btn-main" data-cookie-yes style="width:auto">Accetta</button></div>
+  </div>
+  <script>try{var n=sessionStorage.getItem('lead_nome');if(n)document.querySelector('[data-nome]').textContent=' '+n;}catch(e){}</script>
+  <script src="/app.js"></script>
+</body>
+</html>

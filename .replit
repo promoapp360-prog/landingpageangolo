@@ -1,0 +1,16 @@
+modules = ["nodejs-22"]
+run = "npm start"
+
+[nix]
+channel = "stable-24_05"
+
+[env]
+TZ = "Europe/Rome"
+
+[[ports]]
+localPort = 3000
+externalPort = 80
+
+[deployment]
+run = ["sh", "-c", "npm start"]
+deploymentTarget = "gce"

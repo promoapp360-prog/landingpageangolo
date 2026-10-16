@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contatti laser · L'Angolo del Benessere</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/logo.webp">
+<link rel="stylesheet" href="/style.css">
+<style>
+  body { padding: 0; background: #f7f1f4; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
+  .head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .head h1 { font-size: 1.8rem; margin: 0; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border-radius: 16px; padding: 14px 16px; }
+  .kpi b { display: block; font-family: var(--serif); font-size: 1.7rem; color: var(--plum); } .kpi span { font-size: .8rem; color: var(--ink-2); }
+  .bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .bar button { border: 1.5px solid var(--line); background: #fff; border-radius: 999px; padding: 7px 14px; font: 700 .85rem var(--sans); cursor: pointer; color: var(--ink-2); }
+  .bar button.on { background: var(--plum); color: #fff; border-color: var(--plum); }
+  .lead { background: #fff; border-radius: 18px; padding: 16px; margin-bottom: 10px; display: grid; grid-template-columns: 1fr auto; gap: 10px; border-left: 5px solid var(--line); }
+  .lead.nuovo { border-left-color: var(--rose); } .lead.contattato { border-left-color: #d9a54a; } .lead.prenotato { border-left-color: #2e9e5b; } .lead.perso { border-left-color: #bbb; opacity: .7; }
+  .lead h3 { font-family: var(--sans); font-size: 1.05rem; margin: 0 0 2px; }
+  .meta { font-size: .85rem; color: var(--ink-2); }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; } .tags span { background: var(--blush); color: var(--rose-d); font-size: .75rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; }
+  .acts { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+  .acts .btn { padding: 9px 14px; font-size: .85rem; }
+  .acts select { width: auto; padding: 8px 32px 8px 10px; font-size: .85rem; border-radius: 10px; }
+  .nota { grid-column: 1 / -1; } .nota input { padding: 8px 12px; font-size: .88rem; border-radius: 10px; }
+  .login { max-width: 360px; margin: 18vh auto; background: #fff; padding: 28px; border-radius: 22px; }
+  .empty { text-align: center; padding: 40px; color: var(--ink-2); }
+  @media (max-width: 560px) { .lead { grid-template-columns: 1fr; } .acts { flex-direction: row; flex-wrap: wrap; align-items: center; } }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const app = document.getElementById('app');
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const api = async (u, o = {}) => { const r = await fetch('/api/admin' + u, { method: o.method || (o.body ? 'POST' : 'GET'), headers: { 'Content-Type': 'application/json' }, body: o.body ? JSON.stringify(o.body) : undefined }); const j = await r.json(); if (!r.ok) { const e = new Error(j.error); e.status = r.status; throw e; } return j; };
+const wa = (t, nome) => { let n = String(t).replace(/[^\d+]/g, ''); if (n.startsWith('00')) n = n.slice(2); n = n.replace('+', ''); if (!n.startsWith('39') || n.length <= 10) n = '39' + n; return `https://wa.me/${n}?text=${encodeURIComponent(`Ciao ${nome.split(' ')[0]}! Sono Mariangela de L'Angolo del Benessere 💜 Ho ricevuto la tua richiesta per la consulenza gratuita sull'epilazione laser 3D. Quando ti farebbe comodo passare?`)}`; };
+let filter = 'tutti', data;
+
+function login() {
+  app.innerHTML = `<form class="login"><h2>Contatti laser</h2><p class="muted">Inserisci la password</p><input type="password" name="p" autofocus><button class="btn btn-main btn-block" style="margin-top:12px">Entra</button><p class="form-err"></p></form>`;
+  app.querySelector('form').onsubmit = async (e) => { e.preventDefault(); try { await api('/login', { body: { password: e.target.p.value } }); load(); } catch (er) { app.querySelector('.form-err').textContent = er.message; } };
+}
+async function load() {
+  try { data = await api('/leads'); } catch (e) { if (e.status === 401) return login(); throw e; }
+  draw();
+}
+function draw() {
+  const L = data.leads, s = data.stats;
+  const count = (st) => L.filter((l) => l.stato === st).length;
+  const today = new Date().toISOString().slice(0, 10);
+  const list = filter === 'tutti' ? L : L.filter((l) => l.stato === filter);
+  app.innerHTML = `<div class="wrap"><div class="head"><h1>Contatti laser</h1><a class="btn btn-ghost-dark" href="/api/admin/leads.csv">Esporta Excel (CSV)</a></div>
+    <div class="kpis"><div class="kpi"><b>${L.filter((l) => l.created_at.startsWith(today)).length}</b><span>contatti oggi</span></div><div class="kpi"><b>${count('nuovo')}</b><span>da richiamare</span></div><div class="kpi"><b>${count('prenotato')}</b><span>prenotati</span></div>
+      <div class="kpi"><b>${s.visite_30}</b><span>visite (30 gg)</span></div><div class="kpi"><b>${s.visite_30 ? ((L.filter((l) => l.created_at >= new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10)).length / s.visite_30) * 100).toFixed(1) : 0}%</b><span>conversione form</span></div><div class="kpi"><b>${s.wa_30} · ${s.tel_30}</b><span>clic WhatsApp · chiamate</span></div></div>
+    <div class="bar">${['tutti', 'nuovo', 'contattato', 'prenotato', 'perso'].map((f) => `<button data-f="${f}" class="${f === filter ? 'on' : ''}">${f[0].toUpperCase() + f.slice(1)}${f !== 'tutti' ? ` (${count(f)})` : ''}</button>`).join('')}</div>
+    ${list.length ? list.map((l) => `<div class="lead ${l.stato}"><div><h3>${esc(l.nome)}</h3><div class="meta">📞 <a href="tel:${esc(l.telefono)}">${esc(l.telefono)}</a> · ${esc(l.created_at.slice(8, 10) + '/' + l.created_at.slice(5, 7) + ' ' + l.created_at.slice(11, 16))}${l.fascia ? ' · richiamare: ' + esc(l.fascia) : ''}</div>
+      <div class="tags">${l.zone ? l.zone.split(', ').map((z) => `<span>${esc(z)}</span>`).join('') : ''}${l.pacchetto ? `<span>📦 ${esc(l.pacchetto)}</span>` : ''}${l.utm_campaign ? `<span style="background:#eef">📣 ${esc(l.utm_campaign)}${l.utm_content ? ' / ' + esc(l.utm_content) : ''}</span>` : l.utm_source ? `<span style="background:#eef">${esc(l.utm_source)}</span>` : ''}</div></div>
+      <div class="acts"><a class="btn btn-wa" target="_blank" href="${wa(l.telefono, l.nome)}">WhatsApp</a><select data-s="${l.id}">${['nuovo', 'contattato', 'prenotato', 'perso'].map((x) => `<option ${x === l.stato ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+      <div class="nota"><input placeholder="Nota interna (es. richiamare giovedì)" data-n="${l.id}" value="${esc(l.nota_interna)}"></div></div>`).join('') : '<div class="empty">Nessun contatto</div>'}</div>`;
+  app.querySelectorAll('[data-f]').forEach((b) => (b.onclick = () => { filter = b.dataset.f; draw(); }));
+  app.querySelectorAll('[data-s]').forEach((s) => (s.onchange = async () => { await api('/leads/' + s.dataset.s, { method: 'PUT', body: { stato: s.value } }); data.leads.find((l) => l.id == s.dataset.s).stato = s.value; draw(); }));
+  app.querySelectorAll('[data-n]').forEach((i) => (i.onchange = () => api('/leads/' + i.dataset.n, { method: 'PUT', body: { nota_interna: i.value } })));
+}
+load();
+setInterval(() => { if (data && !document.activeElement?.matches('input')) load(); }, 60000);
+</script>
+</body>
+</html>

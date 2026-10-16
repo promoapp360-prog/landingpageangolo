@@ -1,0 +1,46 @@
+{
+  "nome_centro": "L'Angolo del Benessere",
+  "titolare": "Mariangela Nevola",
+  "citta": "Barletta",
+  "indirizzo": "Via Madonna della Croce 42, Barletta",
+  "maps_url": "https://www.google.com/maps/search/?api=1&query=Via+Madonna+della+Croce+42+Barletta",
+  "telefono": "+393299456506",
+  "telefono_visibile": "329 945 6506",
+  "whatsapp": "393889532217",
+  "whatsapp_messaggio": "Ciao Mariangela! Ho visto la promo sull'epilazione laser 3D e vorrei prenotare la consulenza gratuita 💜",
+  "instagram": "https://instagram.com/l.angolodelbenessere/",
+  "posti_disponibili": 7,
+  "promo_titolo": "Promo laser del mese",
+  "pacchetti": [
+    {
+      "id": "total-body-6",
+      "nome": "Total Body 6 + 1 seduta omaggio",
+      "dettaglio": "Il percorso completo: 6 sedute total body + 1 seduta in omaggio + consulenza gratuita",
+      "prezzo": 679,
+      "prezzo_pieno": 849,
+      "evidenza": true,
+      "badge": "Il più scelto"
+    },
+    {
+      "id": "total-body-3",
+      "nome": "Total Body 3 sedute",
+      "dettaglio": "Percorso total body da 3 sedute + consulenza e anamnesi gratuita",
+      "prezzo": 339,
+      "prezzo_pieno": 369
+    },
+    {
+      "id": "braccia-inguine-5",
+      "nome": "Braccia + inguine · 5 sedute",
+      "dettaglio": "Pacchetto da 5 sedute per braccia e inguine",
+      "prezzo": 250
+    },
+    {
+      "id": "inguine-ascelle-5",
+      "nome": "Inguine + ascelle · 5 sedute",
+      "dettaglio": "Pacchetto da 5 sedute per inguine e ascelle",
+      "prezzo": 220,
+      "prezzo_pieno": 259
+    }
+  ],
+  "zone": ["Gambe", "Inguine", "Ascelle", "Braccia", "Viso", "Schiena", "Total body", "Non so ancora"]
+}
